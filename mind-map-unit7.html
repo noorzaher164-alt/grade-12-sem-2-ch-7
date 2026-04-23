@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الوحدة السابعة: الانتروبي والطاقة الحرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060b14;
+    --l1: #80deea;
+    --l2: #ce93d8;
+    --l3: #80cbc4;
+    --gold: #ffd54f;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    font-family: 'Cairo', sans-serif;
+    color: #e8f0fe;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 15% 20%, rgba(128,222,234,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 75%, rgba(206,147,216,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(255,213,79,0.04) 0%, transparent 55%);
+  }
+
+  header { text-align:center; padding:44px 20px 18px; }
+  .school-tag {
+    display:inline-block;
+    background:rgba(255,213,79,.1); border:1px solid rgba(255,213,79,.28);
+    color:var(--gold); font-size:.78rem; padding:4px 16px;
+    border-radius:20px; margin-bottom:14px; font-family:'Tajawal',sans-serif;
+  }
+  header h1 {
+    font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900;
+    background:linear-gradient(135deg,#80deea,#b39ddb,#ffe082);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:6px;
+  }
+  header p { color:rgba(232,240,254,.4); font-size:.9rem; font-family:'Tajawal',sans-serif; }
+
+  .stats {
+    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+    padding:20px 20px 8px; max-width:1300px; margin:0 auto;
+  }
+  .stat {
+    background:rgba(255,213,79,.06); border:1px solid rgba(255,213,79,.2);
+    border-radius:14px; padding:12px 20px; text-align:center; min-width:128px;
+    animation:fadeUp .5s ease both;
+  }
+  .stat:nth-child(1){animation-delay:.05s}.stat:nth-child(2){animation-delay:.15s}
+  .stat:nth-child(3){animation-delay:.25s}.stat:nth-child(4){animation-delay:.35s}
+  .stat .n { font-size:1.5rem; font-weight:900; color:var(--gold); }
+  .stat .l { font-size:.74rem; color:rgba(232,240,254,.4); font-family:'Tajawal',sans-serif; }
+
+  .divider { text-align:center; padding:14px 0 10px; color:rgba(232,240,254,.12); font-size:.8rem; letter-spacing:2px; }
+
+  .legend {
+    display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
+    padding:0 20px 18px; max-width:1300px; margin:0 auto;
+  }
+  .leg { display:flex; align-items:center; gap:8px; font-size:.83rem; color:rgba(232,240,254,.5); font-family:'Tajawal',sans-serif; }
+  .ldot { width:12px; height:12px; border-radius:3px; }
+
+  .grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:22px; max-width:1300px; margin:0 auto; padding:0 20px 70px;
+  }
+
+  .lesson {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:22px; overflow:hidden;
+    transition:transform .3s,box-shadow .3s;
+    animation:fadeUp .6s ease both;
+  }
+  .lesson:hover { transform:translateY(-6px); box-shadow:0 22px 60px rgba(0,0,0,.5); }
+  .lesson:nth-child(1){animation-delay:.1s}
+  .lesson:nth-child(2){animation-delay:.25s}
+  .lesson:nth-child(3){animation-delay:.4s}
+
+  @keyframes fadeUp {
+    from{opacity:0;transform:translateY(28px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .lesson-hd { padding:22px 22px 16px; border-bottom-width:2px; border-bottom-style:solid; }
+  .l1 .lesson-hd { background:linear-gradient(135deg,#004d5e,#006064); border-bottom-color:var(--l1); }
+  .l2 .lesson-hd { background:linear-gradient(135deg,#4a148c,#6a1b9a); border-bottom-color:var(--l2); }
+  .l3 .lesson-hd { background:linear-gradient(135deg,#004d40,#00695c); border-bottom-color:var(--l3); }
+
+  .lesson-num { font-size:.74rem; font-weight:600; letter-spacing:2px; opacity:.7; margin-bottom:5px; font-family:'Tajawal',sans-serif; }
+  .l1 .lesson-num{color:var(--l1);} .l2 .lesson-num{color:var(--l2);} .l3 .lesson-num{color:var(--l3);}
+  .lesson-title { font-size:1.2rem; font-weight:700; line-height:1.35; }
+  .lesson-body { padding:16px 20px 22px; }
+
+  .branch { margin-bottom:12px; }
+  .btoggle {
+    display:flex; align-items:center; gap:10px; cursor:pointer;
+    padding:10px 14px; border-radius:12px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+    transition:background .2s,border-color .2s;
+    width:100%; text-align:right; user-select:none;
+  }
+  .btoggle:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.14); }
+
+  .bicon {
+    width:32px; height:32px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; flex-shrink:0;
+  }
+  .l1 .bicon{background:rgba(128,222,234,.15);color:var(--l1);}
+  .l2 .bicon{background:rgba(206,147,216,.15);color:var(--l2);}
+  .l3 .bicon{background:rgba(128,203,196,.15);color:var(--l3);}
+
+  .blabel { flex:1; font-size:.93rem; font-weight:600; }
+  .chev { font-size:.68rem; transition:transform .3s; opacity:.45; }
+  .branch.open .chev { transform:rotate(180deg); }
+  .bcontent { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+  .branch.open .bcontent { max-height:700px; }
+
+  ul.leaves { padding:10px 14px 4px; list-style:none; }
+  ul.leaves li {
+    padding:6px 10px 6px 0;
+    border-right:2px solid rgba(255,255,255,.07);
+    font-size:.87rem; color:rgba(232,240,254,.82);
+    line-height:1.55; font-family:'Tajawal',sans-serif;
+  }
+  ul.leaves li::before { content:'◈'; margin-left:8px; font-size:.62rem; opacity:.4; }
+
+  .chip {
+    display:inline-block; background:rgba(255,213,79,.1);
+    border:1px solid rgba(255,213,79,.25); color:#ffe082;
+    font-size:.78rem; padding:2px 8px; border-radius:6px;
+    font-family:'Tajawal',monospace; margin:2px 0;
+  }
+  .chip-c{background:rgba(128,222,234,.1);border-color:rgba(128,222,234,.25);color:#80deea;}
+  .chip-p{background:rgba(206,147,216,.1);border-color:rgba(206,147,216,.25);color:#ce93d8;}
+  .chip-g{background:rgba(128,203,196,.1);border-color:rgba(128,203,196,.25);color:#80cbc4;}
+  .chip-r{background:rgba(255,138,101,.1);border-color:rgba(255,138,101,.25);color:#ffab91;}
+
+  /* special summary table */
+  .summary-table {
+    width:100%; border-collapse:collapse; margin-top:8px; font-size:.82rem;
+    font-family:'Tajawal',sans-serif;
+  }
+  .summary-table th {
+    background:rgba(206,147,216,.15); color:#ce93d8;
+    padding:6px 10px; text-align:center; font-weight:700;
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .summary-table td {
+    padding:6px 10px; text-align:center;
+    border:1px solid rgba(255,255,255,.06);
+    color:rgba(232,240,254,.8);
+  }
+  .summary-table tr:nth-child(even) td { background:rgba(255,255,255,.03); }
+  .pos { color:#80cbc4; font-weight:700; }
+  .neg { color:#ef9a9a; font-weight:700; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="school-tag">مدرسة الإيمان الثانوية للبنات • الصف الثاني عشر</div>
+  <h1>🌀 الوحدة السابعة: الانتروبي والطاقة الحرة</h1>
+  <p>اضغط على أي فرع لعرض التفاصيل</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="n">3</div><div class="l">دروس رئيسية</div></div>
+  <div class="stat"><div class="n">ΔS</div><div class="l">الانتروبي</div></div>
+  <div class="stat"><div class="n" style="font-size:1rem">ΔG=ΔH−TΔS</div><div class="l">طاقة جبس الحرة</div></div>
+  <div class="stat"><div class="n">4</div><div class="l">حالات التلقائية</div></div>
+</div>
+
+<div class="divider">── ── ──</div>
+
+<div class="legend">
+  <div class="leg"><div class="ldot" style="background:var(--l1)"></div>الدرس الأول — الانتروبي</div>
+  <div class="leg"><div class="ldot" style="background:var(--l2)"></div>الدرس الثاني — تغيرات الانتروبي</div>
+  <div class="leg"><div class="ldot" style="background:var(--l3)"></div>الدرس الثالث — طاقة جبس الحرة</div>
+</div>
+
+<div class="grid">
+
+  <!-- ══ LESSON 1 ══ -->
+  <div class="lesson l1">
+    <div class="lesson-hd">
+      <div class="lesson-num">الدرس الأول</div>
+      <div class="lesson-title">الانتروبي — Entropy (S)</div>
+    </div>
+    <div class="lesson-body">
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🌪️</div>
+          <span class="blabel">تعريف الانتروبي والتلقائية</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><strong>التلقائية:</strong> حدوث التفاعل بشكل طبيعي بدون تأثير خارجي</li>
+          <li><strong>الانتروبي S:</strong> مقياس درجة العشوائية الموجودة في النظام</li>
+          <li>بعض العمليات تحدث في اتجاه واحد ولا يمكن أن تنعكس</li>
+          <li>ΔS = + عند زيادة العشوائية (من النظام إلى الفوضى)</li>
+          <li>ΔS = − عند نقص العشوائية (من الفوضى إلى النظام)</li>
+          <li>النظام يفضل المحتوى الحراري المنخفض ΔH = −ve</li>
+          <li>النظام يفضل الانتروبي المرتفع ΔS = +ve</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">📊</div>
+          <span class="blabel">العوامل التي تزيد الانتروبي</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><strong>① تغيّر الحالة الفيزيائية:</strong></li>
+          <li>مو(s) &lt; مو(l) &lt; مو(g) — ΔS: صلب→سائل→غاز = تزداد عشوائية</li>
+          <li>عمليات تزيد S: الانصهار — التبخر — التسامي → ΔS = +</li>
+          <li>عمليات تقلل S: التجمد — التكثف — الترسيب → ΔS = −</li>
+          <li><strong>② زيادة عدد الجسيمات (المولات):</strong> نواتج أكثر مولات → ΔS = +</li>
+          <li><strong>③ زيادة درجة الحرارة:</strong> تزداد الطاقة الحركية → تزداد سرعة الجسيمات → ΔS = +</li>
+          <li><strong>④ زيادة تركيز المواد المذابة كلياً:</strong> يزداد عدد الجسيمات في النواتج → ΔS = +</li>
+          <li><strong>⑤ زيادة حجم الغاز:</strong> تزداد المسافة بين الجزيئات → ΔS = +</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🔬</div>
+          <span class="blabel">كيف تحدد إشارة ΔS من المعادلة؟</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><strong>خطوة 1:</strong> قارن مولات الغاز في النواتج والمتفاعلات</li>
+          <li>مولات غاز النواتج > المتفاعلات → ΔS = + (تزداد)</li>
+          <li>مولات غاز النواتج < المتفاعلات → ΔS = − (تقل)</li>
+          <li><strong>خطوة 2:</strong> إذا تساوت مولات الغاز → انظر لتغيّر الحالة الفيزيائية</li>
+          <li>صلب/سائل → غاز = ΔS = + | غاز → صلب/سائل = ΔS = −</li>
+          <li><strong>خطوة 3:</strong> انظر عدد الجسيمات الذائبة (aq) — أكثر في النواتج = ΔS = +</li>
+          <li>⚠️ إذا صعب التحديد → "يصعب توقع التغير في الانتروبي"</li>
+        </ul></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ LESSON 2 ══ -->
+  <div class="lesson l2">
+    <div class="lesson-hd">
+      <div class="lesson-num">الدرس الثاني</div>
+      <div class="lesson-title">تغيرات الانتروبي في التفاعلات الكيميائية</div>
+    </div>
+    <div class="lesson-body">
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🌡️</div>
+          <span class="blabel">الانتروبي المطلق S° والقانون الثالث</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><strong>الانتروبي المطلق القياسي S°:</strong> التغير في الانتروبي بين درجة الصفر المطلق (0K) وحرارة ثلاث لثلاث المادة (298K)</li>
+          <li><strong>القانون الثالث للديناميكا الحرارية:</strong> الصفر المطلق هو أدنى درجة حرارة ممكنة — عندها الانتروبي للنظام يساوي صفراً</li>
+          <li>عند T = 0K → النظام في حالة نظام مثالي → انتروبي = صفر</li>
+          <li>عند T > 0K → النظام أكثر عشوائية → انتروبي موجب</li>
+          <li>وحدة قياس S°: <span class="chip chip-p">J/mol·K</span></li>
+          <li>العناصر النقية لها إنتروبي قياسي S° موجبة (رغم أن ΔH°f = 0)</li>
+          <li>الحالة الفيزيائية لها تأثير كبير في قيمة S° المطلقة</li>
+          <li>مثال: Fe(s) = 27.15 J/mol·K | Fe(g) = 180.5 J/mol·K</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🧮</div>
+          <span class="blabel">حساب ΔS° للتفاعل</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><span class="chip chip-p">ΔS° = Σ(n × S°نواتج) − Σ(m × S°متفاعلات)</span></li>
+          <li>n, m = معاملات المعادلة الموزونة</li>
+          <li>ΔS° موجبة (+) → انتروبي النواتج > المتفاعلات → زيادة في الانتروبي</li>
+          <li>ΔS° سالبة (−) → انتروبي النواتج < المتفاعلات → نقصان في الانتروبي</li>
+          <li>⚠️ لا يمكن حساب المحتوى الحراري H° مطلقاً — لكن يمكن حساب ΔH°</li>
+          <li>يمكن حساب S° مطلقاً (بفضل القانون الثالث) وأيضاً ΔS°</li>
+          <li>يمكن حساب ΔS° بطريقة هس أيضاً (جمع معادلات)</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">💡</div>
+          <span class="blabel">أمثلة تطبيقية على ΔS</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li>2NH₄NO₃(s) → 2N₂ + 4H₂O(l) + O₂ → <span class="chip chip-g">ΔS = +</span> (صلب → غاز)</li>
+          <li>8SO₂(g) + 16H₂S(g) → 3S₈(s) + 16H₂O → <span class="chip chip-r">ΔS = −</span> (غاز → صلب)</li>
+          <li>4Fe(s) + 3O₂(g) → 2Fe₂O₃(s) → <span class="chip chip-r">ΔS = −</span> (غاز → صلب + تقليل مولات)</li>
+          <li>CaCO₃(s) → CaO(s) + CO₂(g) → <span class="chip chip-g">ΔS = +</span> (صلب → غاز)</li>
+          <li>C₁₂H₂₂O₁₁(aq) + H₂O → 2C₆H₁₂O₆(aq) → <span class="chip chip-g">ΔS = +</span> (جسيمات ذائبة أكثر)</li>
+        </ul></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ LESSON 3 ══ -->
+  <div class="lesson l3">
+    <div class="lesson-hd">
+      <div class="lesson-num">الدرس الثالث</div>
+      <div class="lesson-title">طاقة جبس الحرة — Gibbs Free Energy (G)</div>
+    </div>
+    <div class="lesson-body">
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">⚡</div>
+          <span class="blabel">تعريف طاقة جبس وقانونها</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li>أقصى كمية من الشغل يمكن الحصول عليها من نظام مغلق</li>
+          <li>وحدتها: الجول (J) أو كيلوجول (kJ)</li>
+          <li><span class="chip chip-g">ΔG° = ΔH° − T × ΔS°</span></li>
+          <li>⚠️ T بالكلفن: T(K) = T(°C) + 273</li>
+          <li>⚠️ وحّد الوحدات: إذا ΔH بالـ kJ وΔS بالـ J → اقسم ΔS على 1000</li>
+          <li>ΔG° سالبة (−) → التفاعل <strong>تلقائي</strong></li>
+          <li>ΔG° موجبة (+) → التفاعل <strong>غير تلقائي</strong></li>
+          <li>ΔG° = صفر → النظام في حالة <strong>اتزان</strong> (لا يميل لأي اتجاه)</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">📋</div>
+          <span class="blabel">جدول الحالات الأربعة للتلقائية</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent">
+          <table class="summary-table">
+            <tr>
+              <th>ΔH°</th><th>ΔS°</th><th>ΔG°</th><th>التلقائية</th>
+            </tr>
+            <tr>
+              <td class="neg">− (طارد)</td>
+              <td class="pos">+ (يزداد)</td>
+              <td class="neg">سالبة دائماً</td>
+              <td>✅ تلقائي عند كل درجات الحرارة</td>
+            </tr>
+            <tr>
+              <td class="pos">+ (ماص)</td>
+              <td class="neg">− (يقل)</td>
+              <td class="pos">موجبة دائماً</td>
+              <td>❌ غير تلقائي عند كل درجات الحرارة</td>
+            </tr>
+            <tr>
+              <td class="pos">+ (ماص)</td>
+              <td class="pos">+ (يزداد)</td>
+              <td>تعتمد على T</td>
+              <td>✅ تلقائي عند درجات الحرارة العالية فقط</td>
+            </tr>
+            <tr>
+              <td class="neg">− (طارد)</td>
+              <td class="neg">− (يقل)</td>
+              <td>تعتمد على T</td>
+              <td>✅ تلقائي عند درجات الحرارة المنخفضة فقط</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🔗</div>
+          <span class="blabel">الطاقة الحرة والاتزان</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li>ΔG < 0 → يسير التفاعل الانعكاسي في الاتجاه الطردي (متفاعلات → نواتج)</li>
+          <li>ΔG > 0 → يسير التفاعل الانعكاسي في الاتجاه العكسي (نواتج → متفاعلات)</li>
+          <li>ΔG = 0 → النظام في حالة اتزان (لا يميل للطردي أو العكسي)</li>
+          <li>عند نقطة الاتزان: <span class="chip chip-g">T = ΔH / ΔS</span></li>
+          <li>مثال: C₆H₆(l) ⇌ C₆H₆(s) عند ΔG=0 → T = −9.83/(−0.0352) = 279.26 K = 6.26°C</li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">🧮</div>
+          <span class="blabel">أنواع مسائل ΔG وخطوات الحل</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li><strong>نوع A — يُعطى ΔH° وΔS°:</strong></li>
+          <li>① حوّل T إلى كلفن | ② حوّل ΔS إلى kJ/mol·K (÷1000) | ③ عوّض في ΔG = ΔH − TΔS</li>
+          <li><strong>نوع B — يُعطى جدول S° وΔH°f:</strong></li>
+          <li>① احسب ΔH° = Σ(n×ΔH°f نواتج) − Σ(m×ΔH°f متفاعلات)</li>
+          <li>② احسب ΔS° = Σ(n×S° نواتج) − Σ(m×S° متفاعلات) | ③ عوّض في ΔG</li>
+          <li><strong>نوع C — إيجاد T عند الاتزان (ΔG = 0):</strong></li>
+          <li><span class="chip">T = ΔH / ΔS</span> (بعد توحيد الوحدات)</li>
+          <li><strong>نوع D — إيجاد ΔS عند الاتزان:</strong></li>
+          <li><span class="chip">ΔS = ΔH / T</span></li>
+        </ul></div>
+      </div>
+
+      <div class="branch">
+        <div class="btoggle" onclick="tog(this)">
+          <div class="bicon">⚠️</div>
+          <span class="blabel">نقاط مهمة وأخطاء شائعة</span>
+          <span class="chev">▼</span>
+        </div>
+        <div class="bcontent"><ul class="leaves">
+          <li>⚠️ دائماً T بالكلفن في معادلة ΔG = ΔH − TΔS</li>
+          <li>⚠️ وحدة ΔG = kJ/mol | وحدة ΔS = J/mol·K — لا بد من التوحيد</li>
+          <li>⚠️ S° للعناصر النقية ≠ صفر (خلافاً لـ ΔH°f التي = صفر)</li>
+          <li>⚠️ التلقائية لا تعني السرعة — التفاعل قد يكون تلقائياً ولكن بطيئاً جداً</li>
+          <li>التفاعلات التلقائية: تحدث بمجرد إتمامها التام (قد تكون سريعة أو بطيئة)</li>
+          <li>العوامل التي تحدد التلقائية: ① المحتوى الحراري ② الانتروبي ③ درجة الحرارة المطلقة</li>
+          <li>ΔG يمكن حسابها أيضاً من: <span class="chip chip-g">ΔG°r = Σ(n×ΔG°f نواتج) − Σ(m×ΔG°f متفاعلات)</span></li>
+        </ul></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function tog(btn) { btn.parentElement.classList.toggle('open'); }
+document.querySelectorAll('.branch:first-of-type .btoggle').forEach(b => {
+  b.parentElement.classList.add('open');
+});
+</script>
+</body>
+</html>
